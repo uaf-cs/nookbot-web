@@ -53,7 +53,7 @@
                 :value="user.classes.includes(course.id)"
                 @input="updateCourse(course.id, $event)"
               >
-                {{ course.section }} - {{ course.instructor }} {{ course.id }}
+                {{ course.section }} - {{ course.instructor }}
               </Checkbox>
             </div>
           </div>
