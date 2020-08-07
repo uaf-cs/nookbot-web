@@ -2,10 +2,43 @@
   <div id="app">
     <div v-if="loading">Loading...</div>
     <div v-else-if="user === null">
-      Please <a href="/api/auth/login">log in</a>.
+      <p>
+        Hey there! Welcome to the UAF Computer Science and Math Discord server.
+        Before we get started, we just want to verify that you're part of the UA
+        system, and as such we'll need you to log into your UA assigned Google
+        account, as well as your Discord account so we know who to tie it to.
+      </p>
+      <p>
+        Here's exactly what'll happen when you click the link to log in.
+      </p>
+      <ol>
+        <li>
+          You'll be directed to Google's log in page. You <strong>must</strong>
+          select your UA assigned Google account here (ending in @alaska.edu) or
+          you will not be able to continue.
+        </li>
+        <li>
+          After logging in with Google, you'll be directed to Discord's log in
+          page. Log in with your Discord account, and allow Nookbot to access
+          your account information.
+        </li>
+        <li>
+          Finally, you'll be directed here. If all your accounts work out,
+          you'll automatically be approved and allowed to view channels on the
+          server. More information will be given on the page when you arrive
+          there.
+        </li>
+      </ol>
+      Click <a href="/api/auth/login">this link</a> when you're ready to get set
+      up.
     </div>
     <div v-else-if="!user.inGuild">
-      Please <a href="https://chat.cs.uaf.edu/">join the discord server</a>.
+      <p>
+        Hey! It's nice to meet you {{ user.google.displayName }}, but it looks
+        like you're not yet in the Discord server.
+        <a href="https://chat.cs.uaf.edu/">Use this link</a> to join that, then
+        come back here.
+      </p>
     </div>
     <div v-else>
       <p class="note">
@@ -21,17 +54,18 @@
         preferred name. Please update it yourself or reach out to an admin for
         assistance.
       </p>
-      <h2>Academic Status</h2>
-      <p class="note">Are you a teacher? Reach out to someone on the admin team and we'll get you set up.</p>
-      <RadioButton
-        v-model="user.status"
-        :options="[
-          {name: 'Student', id: 'student', color: 'rgb(52, 152, 219)' },
-          {name: 'Alumnus', id: 'alumnus', color: 'rgb(163, 99, 247)' }
-        ]"
-        @input="updateStatus"
-      ></RadioButton>
-
+      <div v-if="user.status !== 'teacher'">
+        <h2>Academic Status</h2>
+        <p class="note">Are you a teacher? Reach out to someone on the admin team and we'll get you set up.</p>
+        <RadioButton
+          v-model="user.status"
+          :options="[
+            {name: 'Student', id: 'student', color: 'rgb(52, 152, 219)' },
+            {name: 'Alumnus', id: 'alumnus', color: 'rgb(163, 99, 247)' }
+          ]"
+          @input="updateStatus"
+        ></RadioButton>
+      </div>
       <h2>Course Selection</h2>
       <p class="note">
         Select any courses that you are currently enrolled in, if you'd like.
@@ -89,6 +123,11 @@ export default class Home extends Vue {
   user: User|null = null
 
   async beforeMount () {
+    // Fetch user data
+    const userRequest = await fetch('/api/@me')
+    if (userRequest.ok) {
+      this.user = await userRequest.json()
+    }
     // Fetch all courses
     const courseRequest = await fetch('/api/courses')
     this.courses = await courseRequest.json()
@@ -106,12 +145,6 @@ export default class Home extends Vue {
         this.mappedCourses[course.subject][key] = []
       }
       this.mappedCourses[course.subject][key].push(course)
-    }
-
-    // Fetch user data
-    const userRequest = await fetch('/api/@me')
-    if (userRequest.ok) {
-      this.user = await userRequest.json()
     }
     this.loading = false
   }
