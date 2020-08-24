@@ -172,11 +172,29 @@ export default class Home extends Vue {
     }
   }
 
-  updateCourse (course: string, enrolled: boolean) {
+  async updateCourse (course: string, enrolled: boolean) {
     if (enrolled) {
-      fetch(`/api/@me/courses/${course}`, { method: 'POST' })
+      const req = await fetch(`/api/@me/courses/${course}`, { method: 'POST' })
+      if (req.ok) {
+        this.$toasted.show('Successfully added course', {
+          duration: 1000
+        })
+      } else {
+        this.$toasted.error(`Unable to add course. ${req.status} ${req.statusText}`, {
+          duration: 10000
+        })
+      }
     } else {
-      fetch(`/api/@me/courses/${course}`, { method: 'DELETE' })
+      const req = await fetch(`/api/@me/courses/${course}`, { method: 'DELETE' })
+      if (req.ok) {
+        this.$toasted.show('Successfully removed course', {
+          duration: 1000
+        })
+      } else {
+        this.$toasted.error(`Unable to remove course. ${req.status} ${req.statusText}`, {
+          duration: 10000
+        })
+      }
     }
   }
 
@@ -233,6 +251,28 @@ a {
 .selections {
   display: grid;
   gap: 0.5em;
+}
+
+@media only screen and (min-width: 600px) {
+  .toasted-container.top-right {
+    top: 1em;
+    right: 2em;
+  }
+  .toasted.toasted-primary {
+    margin-top: 1rem;
+  }
+}
+
+.toasted.toasted-primary {
+  background: $blurple;
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin-top: 0;
+}
+
+.toasted.toasted-primary.error {
+  background: $error;
 }
 
 @media screen and (max-width: 50em) {
