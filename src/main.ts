@@ -3,7 +3,9 @@ import Toasted from 'vue-toasted'
 
 import App from './App.vue'
 
-Vue.use(Toasted)
+Vue.use(Toasted, {
+  className: 'toast'
+})
 
 Vue.config.productionTip = false
 

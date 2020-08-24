@@ -223,7 +223,7 @@ export default class Home extends Vue {
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 body {
-  background: $dark;
+  background-color: $dark;
   color: $white;
   overflow-y: scroll;
 }
@@ -264,24 +264,24 @@ a {
 
 @media only screen and (min-width: 600px) {
   .toasted-container.top-right {
-    top: 1em;
-    right: 2em;
+    top: 1em !important;
+    right: 2em !important;
   }
-  .toasted.toasted-primary {
-    margin-top: 1rem;
+  .toast {
+    margin-top: 1rem !important;
   }
 }
 
-.toasted.toasted-primary {
-  background: $blurple;
-  font-family: 'Roboto', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  margin-top: 0;
+.toast {
+  background-color: $blurple !important;
+  font-family: 'Roboto', sans-serif !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  margin-top: 0 !important;
 }
 
-.toasted.toasted-primary.error {
-  background: $error;
+.toast.error {
+  background-color: $error !important;
 }
 
 @media screen and (max-width: 50em) {
