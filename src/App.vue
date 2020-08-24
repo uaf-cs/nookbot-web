@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <div v-if="loading">Loading...</div>
+    <div v-if="loading">
+      <p>Fetching user info and course list...</p>
+      <span v-if="error">{{ error }}. Please report this issue to an admin.</span>
+    </div>
     <div v-else-if="user === null">
       <p>
         Hey there! Welcome to the UAF Computer Science and Math Discord server.
@@ -122,31 +125,37 @@ export default class Home extends Vue {
 
   user: User|null = null
 
+  error: string|null = null
+
   async beforeMount () {
     // Fetch user data
     const userRequest = await fetch('/api/@me')
     if (userRequest.ok) {
       this.user = await userRequest.json()
-    }
-    // Fetch all courses
-    const courseRequest = await fetch('/api/courses')
-    this.courses = await courseRequest.json()
-    this.courses = this.courses.sort((a, b) => {
-      if (`${a.course}-${a.section}` < `${b.course}-${b.section}`) { return -1 }
-      if (`${a.course}-${a.section}` > `${b.course}-${b.section}`) { return 1 }
-      return 0
-    })
-    for (const course of this.courses) {
-      const key = `${course.subject}-${course.course} | ${course.title}`
-      if (this.mappedCourses[course.subject] === undefined) {
-        this.mappedCourses[course.subject] = {}
+      // Fetch all courses
+      const courseRequest = await fetch('/api/courses')
+      this.courses = await courseRequest.json()
+      this.courses = this.courses.sort((a, b) => {
+        if (`${a.course}-${a.section}` < `${b.course}-${b.section}`) { return -1 }
+        if (`${a.course}-${a.section}` > `${b.course}-${b.section}`) { return 1 }
+        return 0
+      })
+      for (const course of this.courses) {
+        const key = `${course.subject}-${course.course} | ${course.title}`
+        if (this.mappedCourses[course.subject] === undefined) {
+          this.mappedCourses[course.subject] = {}
+        }
+        if (this.mappedCourses[course.subject][key] === undefined) {
+          this.mappedCourses[course.subject][key] = []
+        }
+        this.mappedCourses[course.subject][key].push(course)
       }
-      if (this.mappedCourses[course.subject][key] === undefined) {
-        this.mappedCourses[course.subject][key] = []
-      }
-      this.mappedCourses[course.subject][key].push(course)
+      this.loading = false
+    } else if (userRequest.status === 401) {
+      this.loading = false
+    } else {
+      this.error = `${userRequest.status} ${userRequest.statusText}`
     }
-    this.loading = false
   }
 
   @Watch('search')
