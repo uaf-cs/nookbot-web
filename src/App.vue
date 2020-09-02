@@ -27,20 +27,23 @@
         </li>
         <li>
           Finally, you'll be directed here. If all your accounts work out,
-          you'll automatically be approved and allowed to view channels on the
-          server. More information will be given on the page when you arrive
-          there.
+          you'll automatically be added to the server and allowed to view
+          channels there. More information will be given on the page when you
+          arrive there.
         </li>
       </ol>
       Click <a href="/api/auth/login">this link</a> when you're ready to get set
-      up.
+      up. Already joined the Discord server?
+      <a href="https://discord.com/channels/478810581273673746" target="_blank">
+        Here's a link directly to it
+      </a>.
     </div>
     <div v-else-if="!user.inGuild">
       <p>
         Hey! It's nice to meet you {{ user.google.displayName }}, but it looks
-        like you're not yet in the Discord server.
-        <a href="https://chat.cs.uaf.edu/">Use this link</a> to join that, then
-        come back here.
+        like you're not yet in the Discord server. Please refresh this page, and
+        if the issue continues <a href="/api/auth/logout">log out</a> and log
+        back in.
       </p>
     </div>
     <div v-else>
@@ -88,13 +91,17 @@
                 v-for="course of mappedCourses[subject][course]"
                 :key="course.id"
                 :value="user.classes.includes(course.id)"
-                @input="updateCourse(course.id, $event)"
+                @input="updateCourse(course.id)"
               >
                 {{ course.instructor }}
               </Checkbox>
             </div>
           </div>
         </div>
+      </div>
+      <div class="footer" v-if="changes.length > 0">
+        <span>{{ changes.length }} pending changes</span>
+        <button @click="saveCourses">Save selection</button>
       </div>
     </div>
   </div>
@@ -126,6 +133,8 @@ export default class Home extends Vue {
   user: User|null = null
 
   error: string|null = null
+
+  changes: string[] = []
 
   async beforeMount () {
     // Fetch user data
@@ -181,29 +190,47 @@ export default class Home extends Vue {
     }
   }
 
-  async updateCourse (course: string, enrolled: boolean) {
-    if (enrolled) {
-      const req = await fetch(`/api/@me/courses/${course}`, { method: 'POST' })
-      if (req.ok) {
-        this.$toasted.show('Successfully added course', {
-          duration: 1000
-        })
-      } else {
-        this.$toasted.error(`Unable to add course. ${req.status} ${req.statusText}`, {
-          duration: 10000
-        })
-      }
+  updateCourse (course: string) {
+    const index = this.changes.indexOf(course)
+    if (index === -1) {
+      this.changes.push(course)
     } else {
-      const req = await fetch(`/api/@me/courses/${course}`, { method: 'DELETE' })
-      if (req.ok) {
-        this.$toasted.show('Successfully removed course', {
-          duration: 1000
-        })
+      // Remove change from changeset
+      this.changes.splice(index, 1)
+    }
+  }
+
+  async saveCourses () {
+    if (this.user === null) {
+      return
+    }
+    const promises: Promise<Response>[] = []
+    for (const course of this.changes) {
+      const index = this.user.classes.indexOf(course)
+      if (index === -1) {
+        this.user.classes.push(course)
+        promises.push(fetch(`/api/@me/courses/${course}`, { method: 'POST' }))
       } else {
-        this.$toasted.error(`Unable to remove course. ${req.status} ${req.statusText}`, {
-          duration: 10000
-        })
+        this.user.classes.splice(index, 1)
+        promises.push(fetch(`/api/@me/courses/${course}`, { method: 'DELETE' }))
       }
+    }
+    this.changes = []
+    const responses = await Promise.all(promises)
+
+    // Update user data
+    const userRequest = await fetch('/api/@me')
+    if (userRequest.ok) {
+      this.user = await userRequest.json()
+    }
+
+    const ok = responses.reduce((prev, curr) => prev && curr.ok, true)
+    if (ok) {
+      this.$toasted.show('Classes updated successfully', {
+        duration: 3000
+      })
+    } else {
+      this.$toasted.error('Errors encountered. Try reloading this page.')
     }
   }
 
@@ -251,6 +278,7 @@ a {
   max-width: 75em;
   margin: auto;
   padding: 0 5em;
+  margin-bottom: 7em;
 }
 
 .note {
@@ -282,6 +310,26 @@ a {
 
 .toast.error {
   background-color: $error !important;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: $darker;
+  padding: 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  button {
+    border: none;
+    border-radius: 0.25em;
+    background-color: $blurple;
+    color: $white;
+    padding: 1em;
+  }
 }
 
 @media screen and (max-width: 50em) {
