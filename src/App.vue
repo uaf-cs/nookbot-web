@@ -53,7 +53,9 @@
         Welcome to the UAF Computer Science and Math Discord server. Select your
         academic status and any classes you're participating in below and we'll
         get your roles set up on the server. Click
-        <a href="/api/auth/logout">here</a> to log out.
+        <a href="/api/auth/logout">here</a> to log out. Click
+        <a href="https://discord.com/channels/478810581273673746" target="_blank">
+          here</a> to go directly to the Discord server.
       </p>
       <p v-if="!user.updatedNickname">
         We weren't able to update your nickname to match your
