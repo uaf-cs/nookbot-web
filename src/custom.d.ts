@@ -13,6 +13,7 @@ export interface User {
   inGuild: boolean
   updatedNickname: boolean
   classes: string[]
+  subjects: string[]
   status: 'student' | 'alumnus' | 'teacher'
   
   discord: {
@@ -26,4 +27,9 @@ export interface User {
     verified: boolean;
     fetchedAt: string;
   }
+}
+
+export interface Subject {
+  id: string
+  name: string
 }

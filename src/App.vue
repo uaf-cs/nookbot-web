@@ -74,6 +74,23 @@
           @input="updateStatus"
         ></RadioButton>
       </div>
+      <h2>Subject Selection</h2>
+      <p class="note">
+        Selecting any of these options allows you to easily be notified about
+        department announcements. It's strongly suggested that you opt into all
+        subjects that you have a course in.
+      </p>
+      <div class="selections">
+        <Checkbox
+          v-for="subject of subjects"
+          :key="subject.id"
+          :value="user.subjects.includes(subject.id)"
+          @input="updateSubject(subject.id)"
+        >
+          {{ subject.name }}
+        </Checkbox>
+      </div>
+
       <h2>Course Selection</h2>
       <p class="note">
         Select any courses that you are currently enrolled in, if you'd like.
@@ -95,14 +112,14 @@
                 :value="user.classes.includes(course.id)"
                 @input="updateCourse(course.id)"
               >
-                {{ course.instructor }}
+                {{ course.instructor.split(',').map(s => s.trim()).reverse().join('. ') }}
               </Checkbox>
             </div>
           </div>
         </div>
       </div>
-      <div class="footer" v-if="changes.length > 0">
-        <span>{{ changes.length }} pending changes</span>
+      <div class="footer" v-if="changes.length + subjectChanges.length > 0">
+        <span>{{ changes.length + subjectChanges.length }} pending changes</span>
         <button @click="saveCourses">Save selection</button>
       </div>
     </div>
@@ -112,7 +129,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
 
-import { Course, User } from './custom'
+import { Course, Subject, User } from './custom'
 
 import Checkbox from '@/components/Checkbox.vue'
 import RadioButton from '@/components/RadioButton.vue'
@@ -132,11 +149,14 @@ export default class Home extends Vue {
   courses: Course[] = []
   mappedCourses: { [key: string]: { [key: string]: Course[] } } = {}
 
+  subjects: Subject[] = []
+
   user: User|null = null
 
   error: string|null = null
 
   changes: string[] = []
+  subjectChanges: string[] = []
 
   async beforeMount () {
     // Fetch user data
@@ -145,8 +165,9 @@ export default class Home extends Vue {
       this.user = await userRequest.json()
       // Fetch all courses
       const courseRequest = await fetch('/api/courses')
-      this.courses = await courseRequest.json()
-      this.courses = this.courses.sort((a, b) => {
+      const { courses, subjects } = await courseRequest.json()
+      this.subjects = subjects.sort()
+      this.courses = courses.sort((a: Course, b: Course) => {
         if (`${a.course}-${a.section}` < `${b.course}-${b.section}`) { return -1 }
         if (`${a.course}-${a.section}` > `${b.course}-${b.section}`) { return 1 }
         return 0
@@ -202,6 +223,16 @@ export default class Home extends Vue {
     }
   }
 
+  updateSubject (subject: string) {
+    const index = this.subjectChanges.indexOf(subject)
+    if (index === -1) {
+      this.subjectChanges.push(subject)
+    } else {
+      // Remove change from changeset
+      this.subjectChanges.splice(index, 1)
+    }
+  }
+
   async saveCourses () {
     if (this.user === null) {
       return
@@ -218,6 +249,17 @@ export default class Home extends Vue {
       }
     }
     this.changes = []
+    for (const subject of this.subjectChanges) {
+      const index = this.user.subjects.indexOf(subject)
+      if (index === -1) {
+        this.user.classes.push(subject)
+        promises.push(fetch(`/api/@me/subjects/${subject}`, { method: 'POST' }))
+      } else {
+        this.user.classes.splice(index, 1)
+        promises.push(fetch(`/api/@me/subjects/${subject}`, { method: 'DELETE' }))
+      }
+    }
+    this.subjectChanges = []
     const responses = await Promise.all(promises)
 
     // Update user data
