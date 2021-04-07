@@ -1,18 +1,22 @@
 <template>
   <div id="app">
-    <div v-if="loading">
+    <div v-if="false">
       <p>Fetching user info and course list...</p>
       <span v-if="error">{{ error }}. Please report this issue to an admin.</span>
     </div>
     <div v-else-if="user === null">
+      <h1>UAF CS+DMS</h1>
       <p>
         Hey there! Welcome to the UAF Computer Science and Math Discord server.
         Before we get started, we just want to verify that you're part of the UA
         system, and as such we'll need you to log into your UA assigned Google
         account, as well as your Discord account so we know who to tie it to.
       </p>
+      <div class="button-flex">
+        <a href="/api/auth/login">Log In</a>
+      </div>
       <p>
-        Here's exactly what'll happen when you click the link to log in.
+        Here's exactly what'll happen when you click Log In.
       </p>
       <ol>
         <li>
@@ -32,11 +36,13 @@
           arrive there.
         </li>
       </ol>
-      Click <a href="/api/auth/login">this link</a> when you're ready to get set
-      up. Already joined the Discord server?
-      <a href="https://discord.com/channels/478810581273673746" target="_blank">
-        Here's a link directly to it
-      </a>.
+      <p>
+        Already joined the Discord server?
+        <a href="https://discord.com/channels/478810581273673746" target="_blank">
+          Here's a link directly to it
+        </a>. <span class="note">This link will only work if you've already
+        logged into this website.</span>
+      </p>
     </div>
     <div v-else-if="!user.inGuild">
       <p>
@@ -52,11 +58,12 @@
         ({{ user.discord.username}}#{{ user.discord.discriminator }})!
         Welcome to the UAF Computer Science and Math Discord server. Select your
         academic status and any classes you're participating in below and we'll
-        get your roles set up on the server. Click
-        <a href="/api/auth/logout">here</a> to log out. Click
-        <a href="https://discord.com/channels/478810581273673746" target="_blank">
-          here</a> to go directly to the Discord server.
+        get your roles set up on the server.
       </p>
+      <div class="button-flex">
+        <a href="/api/auth/logout">Log Out</a>
+        <a href="https://discord.com/channels/478810581273673746/539649299798032384">Open Discord</a>
+      </div>
       <p v-if="!user.updatedNickname">
         We weren't able to update your nickname to match your
         preferred name. Please update it yourself or reach out to an admin for
@@ -373,6 +380,22 @@ a {
     background-color: $blurple;
     color: $white;
     padding: 1em;
+  }
+}
+
+.button-flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1em;
+
+  a {
+    border: none;
+    border-radius: 0.25em;
+    background-color: $blurple;
+    color: $white;
+    padding: 1em;
+    text-decoration: none;
   }
 }
 
