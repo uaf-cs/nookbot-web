@@ -9,3 +9,99 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// Discord models
+model User {
+  id        BigInt   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  username      String
+  discriminator String
+  email         String
+  fullName      String
+
+  guildMembers Member[]
+}
+
+model Member {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId BigInt
+  user   User   @relation(fields: [userId], references: [id])
+
+  guildId BigInt
+  guild   Guild  @relation(fields: [guildId], references: [id])
+
+  roles Role[]
+}
+
+model Role {
+  id        BigInt   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name        String
+  permissions BigInt
+  color       Int
+  members     Member[]
+
+  guildId BigInt
+  guild   Guild  @relation(fields: [guildId], references: [id])
+}
+
+model Channel {
+  id        BigInt   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name String
+
+  guildId BigInt
+  guild   Guild  @relation(fields: [guildId], references: [id])
+}
+
+model Guild {
+  id        BigInt   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name     String
+  owner    BigInt
+  roles    Role[]
+  members  Member[]
+  channels Channel[]
+}
+
+// Course models
+model Subject {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name    String
+  code    String
+  courses Course[]
+}
+
+model Course {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title       String
+  code        String
+  description String
+  instructors Instructor[]
+
+  subjectId String
+  subject   Subject @relation(fields: [subjectId], references: [id])
+}
+
+model Instructor {
+  id      String   @id @default(uuid())
+  name    String
+  courses Course[]
+}
