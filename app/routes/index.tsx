@@ -1,3 +1,5 @@
+
+import Radio from '~/components/forms/radio'
 export default function Index () {
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.4' }}>
@@ -27,6 +29,8 @@ export default function Index () {
           </a>
         </li>
       </ul>
+      <Radio />
+
     </div>
   )
 }

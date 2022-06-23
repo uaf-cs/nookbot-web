@@ -4,3 +4,5 @@ node_modules
 /public/build
 .env
 docker-compose.yaml
+/postgres-data
+/app/tailwind.css
