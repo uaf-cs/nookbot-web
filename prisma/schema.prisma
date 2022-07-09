@@ -22,6 +22,7 @@ model User {
   fullName      String
 
   guildMembers Member[]
+  sessions     Session[]
 }
 
 model Member {
@@ -104,4 +105,12 @@ model Instructor {
   id      String   @id @default(uuid())
   name    String
   courses Course[]
+}
+
+model Session {
+  id      String   @id @default(uuid())
+  data    String
+  expires DateTime
+  userId  BigInt?
+  user    User?     @relation(fields: [userId], references: [id])
 }
