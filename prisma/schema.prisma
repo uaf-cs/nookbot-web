@@ -10,8 +10,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Discord models
 model User {
+  id       String  @id @default(uuid())
+  fullName String?
+
+  googleId String     @unique
+  google   GoogleUser @relation(fields: [googleId], references: [id])
+
+  sessions Session[]
+}
+
+// Google modles
+model GoogleUser {
+  id          String @id
+  displayName String
+  email       String
+
+  user User?
+}
+
+// Discord models
+model DiscordUser {
   id        BigInt   @id
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -19,10 +38,8 @@ model User {
   username      String
   discriminator String
   email         String
-  fullName      String
 
   guildMembers Member[]
-  sessions     Session[]
 }
 
 model Member {
@@ -31,7 +48,7 @@ model Member {
   updatedAt DateTime @updatedAt
 
   userId BigInt
-  user   User   @relation(fields: [userId], references: [id])
+  user   DiscordUser @relation(fields: [userId], references: [id])
 
   guildId BigInt
   guild   Guild  @relation(fields: [guildId], references: [id])
@@ -110,7 +127,6 @@ model Instructor {
 model Session {
   id      String   @id @default(uuid())
   data    String
-  expires DateTime
-  userId  BigInt?
-  user    User?     @relation(fields: [userId], references: [id])
+  userId  String?
+  user    User?    @relation(fields: [userId], references: [id])
 }
