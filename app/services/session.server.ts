@@ -1,5 +1,5 @@
 import { createSessionStorage } from '@remix-run/node' // or "@remix-run/cloudflare"
-import { db } from '~/utils/db.server'
+import { prisma } from '~/services/prisma.server'
 import env from './env.server'
 
 type Cookie = Parameters<typeof createSessionStorage>[0]['cookie']
@@ -11,7 +11,7 @@ function createDatabaseSessionStorage (cookie: Cookie) {
       // `expires` is a Date after which the data should be considered
       // invalid. You could use it to invalidate the data somehow or
       // automatically purge this record from your database.
-      const session = await db.session.create({
+      const session = await prisma.session.create({
         data: {
           data: JSON.stringify(data)
         }
@@ -19,11 +19,11 @@ function createDatabaseSessionStorage (cookie: Cookie) {
       return session.id
     },
     async readData (id) {
-      const sess = await db.session.findUnique({ where: { id } })
+      const sess = await prisma.session.findUnique({ where: { id } })
       return JSON.parse(sess?.data ?? '{}')
     },
     async updateData (id, data, expires) {
-      await db.session.update(
+      await prisma.session.update(
         {
           where: { id },
           data: {
@@ -34,7 +34,7 @@ function createDatabaseSessionStorage (cookie: Cookie) {
       )
     },
     async deleteData (id) {
-      await db.session.delete({ where: { id } })
+      await prisma.session.delete({ where: { id } })
     }
   })
 }
