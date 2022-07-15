@@ -17,6 +17,9 @@ model User {
   googleId String     @unique
   google   GoogleUser @relation(fields: [googleId], references: [id])
 
+  discordId BigInt?      @unique
+  discord   DiscordUser? @relation(fields: [discordId], references: [id])
+
   sessions Session[]
 }
 
@@ -39,6 +42,7 @@ model DiscordUser {
   discriminator String
   email         String
 
+  user         User?
   guildMembers Member[]
 }
 
@@ -125,8 +129,8 @@ model Instructor {
 }
 
 model Session {
-  id      String   @id @default(uuid())
-  data    String
-  userId  String?
-  user    User?    @relation(fields: [userId], references: [id])
+  id     String  @id @default(uuid())
+  data   String
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
 }
