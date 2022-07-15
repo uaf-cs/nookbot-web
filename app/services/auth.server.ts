@@ -27,6 +27,7 @@ authenticator.use(new GoogleStrategy({
   if (user == null) {
     user = await prisma.user.create({
       data: {
+        fullName: profile.displayName,
         google: {
           connectOrCreate: {
             where: {
@@ -38,6 +39,12 @@ authenticator.use(new GoogleStrategy({
       }
     })
   } else {
+    user = await prisma.user.update({
+      where: { googleId: profile.id },
+      data: {
+        fullName: profile.displayName
+      }
+    })
     await prisma.googleUser.update({ where: { id: profile.id }, data: googleUser })
   }
 
