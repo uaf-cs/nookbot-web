@@ -1,5 +1,7 @@
+import { LoaderFunction } from '@remix-run/node'
 import { Form } from '@remix-run/react'
 import { SocialsProvider } from 'remix-auth-socials'
+import { authenticator } from '~/services/auth.server'
 
 interface SocialButtonProps {
   provider: SocialsProvider
@@ -21,6 +23,14 @@ const SocialButton: React.FC<SocialButtonProps> = ({ provider, label }: { provid
       <button className={'min-w-[300px] text-white px-4 py-2 rounded-md ' + brandClass}>{label}</button>
     </Form>
   )
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+  await authenticator.isAuthenticated(request, {
+    successRedirect: '/dashboard'
+  })
+
+  return null
 }
 
 export default function Login () {
