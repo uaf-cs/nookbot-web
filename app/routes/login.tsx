@@ -1,29 +1,7 @@
-import { LoaderFunction } from '@remix-run/node'
-import { Form } from '@remix-run/react'
+import type { LoaderFunction } from '@remix-run/node'
 import { SocialsProvider } from 'remix-auth-socials'
 import { authenticator } from '~/services/auth.server'
-
-interface SocialButtonProps {
-  provider: SocialsProvider
-  label: string
-}
-
-const SocialButton: React.FC<SocialButtonProps> = ({ provider, label }: { provider: SocialsProvider, label: string }) => {
-  let brandClass = 'bg-uaf-blue'
-  switch (provider) {
-    case SocialsProvider.DISCORD:
-      brandClass = 'bg-[#5865F2]'
-      break
-
-    case SocialsProvider.GOOGLE:
-      brandClass = 'bg-[#4285F4]'
-  }
-  return (
-    <Form action={`/auth/${provider as string}`} method="post" className='flex flex-col items-center'>
-      <button className={'min-w-[300px] text-white px-4 py-2 rounded-md ' + brandClass}>{label}</button>
-    </Form>
-  )
-}
+import { SocialButton } from '../components/forms/socialButton'
 
 export const loader: LoaderFunction = async ({ request }) => {
   await authenticator.isAuthenticated(request, {
