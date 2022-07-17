@@ -32,11 +32,11 @@ export default function Onboarding () {
       <div className="w-lg max-w-3xl self-center space-y-4">
         <h1 className='text-2xl'>Connect to Discord</h1>
         <p>
-          Hiya <span className='font-bold'>{user.fullName}</span>, thanks for logging in! Before we can continue we'll
-          need you to connect your Discord account as well. We use your Discord account information to add you to UAF
-          Discord communities, automatically vetting you as a UA affiliated person. Don't have a Discord account yet?
-          You'll have the option to create one after following the below link. You can update your Discord account later
-          via the Dashboard.
+          Hiya <span className='font-bold'>{user.fullName}</span>, thanks for logging in! Before we can continue, we'll
+          need you to connect your Discord account. We use your Discord account information to add you to UAF Discord
+          communities, automatically vetting you as a UA affiliated person. Don't have a Discord account yet? You'll
+          have the option to create one after following the below link. You can update your Discord account later via
+          the Dashboard.
         </p>
         <div className="space-y-2">
           <SocialButton provider={SocialsProvider.DISCORD} label="Login with Discord" />
