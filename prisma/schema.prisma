@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,126 +8,111 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(uuid())
-  fullName String?
-
-  googleId String     @unique
-  google   GoogleUser @relation(fields: [googleId], references: [id])
-
-  discordId String?      @unique
-  discord   DiscordUser? @relation(fields: [discordId], references: [id])
-
-  sessions Session[]
+  id             String          @id @default(uuid())
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  fullName       String?
+  googleId       String          @unique
+  discordId      String?         @unique
+  academicStatus AcademicStatus?
+  discord        DiscordUser?    @relation(fields: [discordId], references: [id])
+  google         GoogleUser      @relation(fields: [googleId], references: [id])
+  sessions       Session[]
 }
 
-// Google modles
 model GoogleUser {
-  id          String @id
+  id          String   @id
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   displayName String
   email       String
-
-  user User?
+  user        User?
 }
 
-// Discord models
 model DiscordUser {
-  id        String   @id
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  id            String   @id
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
   username      String
   discriminator String
-
-  accessToken  String
-  refreshToken String
-
-  user         User?
-  guildMembers Member[]
-  Guild        Guild[]
+  accessToken   String
+  refreshToken  String
+  Guild         Guild[]
+  guildMembers  Member[]
+  user          User?
 }
 
 model Member {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  userId String
-  user   DiscordUser @relation(fields: [userId], references: [id])
-
-  guildId String
-  guild   Guild  @relation(fields: [guildId], references: [id])
-
-  roles Role[]
+  id        String      @id @default(uuid())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  userId    String
+  guildId   String
+  guild     Guild       @relation(fields: [guildId], references: [id])
+  user      DiscordUser @relation(fields: [userId], references: [id])
+  roles     Role[]
 }
 
 model Role {
-  id        String   @id
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  id          String   @id
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   name        String
   permissions String
   color       Int
+  guildId     String
+  guild       Guild    @relation(fields: [guildId], references: [id])
   members     Member[]
-
-  guildId String
-  guild   Guild  @relation(fields: [guildId], references: [id])
 }
 
 model Channel {
   id        String   @id
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  name String
-
-  guildId String
-  guild   Guild  @relation(fields: [guildId], references: [id])
+  name      String
+  guildId   String
+  guild     Guild    @relation(fields: [guildId], references: [id])
 }
 
 model Guild {
-  id        String   @id
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  name     String
-  roles    Role[]
-  members  Member[]
-  channels Channel[]
-
-  ownerId String
-  owner   DiscordUser? @relation(fields: [ownerId], references: [id])
+  id        String      @id
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  name      String
+  ownerId   String
+  owner     DiscordUser @relation(fields: [ownerId], references: [id])
+  channels  Channel[]
+  members   Member[]
+  roles     Role[]
 }
 
-// Course models
 model Subject {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  name    String
-  code    String
-  courses Course[]
+  name      String
+  code      String
+  courses   Course[]
 }
 
 model Course {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  id          String       @id @default(uuid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   title       String
   code        String
   description String
+  subjectId   String
+  subject     Subject      @relation(fields: [subjectId], references: [id])
   instructors Instructor[]
-
-  subjectId String
-  subject   Subject @relation(fields: [subjectId], references: [id])
 }
 
 model Instructor {
-  id      String   @id @default(uuid())
-  name    String
-  courses Course[]
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  courses   Course[]
 }
 
 model Session {
@@ -138,4 +120,9 @@ model Session {
   data   String
   userId String?
   user   User?   @relation(fields: [userId], references: [id])
+}
+
+enum AcademicStatus {
+  STUDENT
+  ALUMNI
 }
