@@ -17,7 +17,7 @@ model User {
   googleId String     @unique
   google   GoogleUser @relation(fields: [googleId], references: [id])
 
-  discordId BigInt?      @unique
+  discordId String?      @unique
   discord   DiscordUser? @relation(fields: [discordId], references: [id])
 
   sessions Session[]
@@ -34,16 +34,19 @@ model GoogleUser {
 
 // Discord models
 model DiscordUser {
-  id        BigInt   @id
+  id        String   @id
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   username      String
   discriminator String
-  email         String
+
+  accessToken  String
+  refreshToken String
 
   user         User?
   guildMembers Member[]
+  Guild        Guild[]
 }
 
 model Member {
@@ -51,50 +54,52 @@ model Member {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  userId BigInt
+  userId String
   user   DiscordUser @relation(fields: [userId], references: [id])
 
-  guildId BigInt
+  guildId String
   guild   Guild  @relation(fields: [guildId], references: [id])
 
   roles Role[]
 }
 
 model Role {
-  id        BigInt   @id
+  id        String   @id
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   name        String
-  permissions BigInt
+  permissions String
   color       Int
   members     Member[]
 
-  guildId BigInt
+  guildId String
   guild   Guild  @relation(fields: [guildId], references: [id])
 }
 
 model Channel {
-  id        BigInt   @id
+  id        String   @id
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   name String
 
-  guildId BigInt
+  guildId String
   guild   Guild  @relation(fields: [guildId], references: [id])
 }
 
 model Guild {
-  id        BigInt   @id
+  id        String   @id
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   name     String
-  owner    BigInt
   roles    Role[]
   members  Member[]
   channels Channel[]
+
+  ownerId String
+  owner   DiscordUser? @relation(fields: [ownerId], references: [id])
 }
 
 // Course models
