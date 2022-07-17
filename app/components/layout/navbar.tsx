@@ -14,48 +14,15 @@ import {
   XIcon
 } from '@heroicons/react/outline'
 import { ChevronDownIcon } from '@heroicons/react/solid'
-import { Link, useLoaderData } from '@remix-run/react'
+import { Link } from '@remix-run/react'
 
 import wordmark from '~/assets/wordmark.svg'
-import type { User } from '@prisma/client'
+import type { GoogleUser, User } from '@prisma/client'
 
-const solutions = [
-  {
-    name: 'Analytics',
-    description: 'Get a better understanding of where your traffic is coming from.',
-    href: '#',
-    icon: ChartBarIcon
-  },
-  {
-    name: 'Engagement',
-    description: 'Speak directly to your customers in a more meaningful way.',
-    href: '#',
-    icon: CursorClickIcon
-  },
-  { name: 'Security', description: "Your customers' data will be safe and secure.", href: '#', icon: ShieldCheckIcon },
-  {
-    name: 'Integrations',
-    description: "Connect with third-party tools that you're already using.",
-    href: '#',
-    icon: ViewGridIcon
-  },
-  {
-    name: 'Automations',
-    description: 'Build strategic funnels that will drive your customers to convert',
-    href: '#',
-    icon: RefreshIcon
-  }
-]
 const resources = [
   {
-    name: 'Help Center',
-    description: 'Get all of your questions answered in our forums or contact support.',
-    href: '#',
-    icon: SupportIcon
-  },
-  {
     name: 'Guides',
-    description: 'Learn how to maximize our platform to get the most out of it.',
+    description: 'Learn how to maximize Nookbot to get the most out of it.',
     href: '#',
     icon: BookmarkAltIcon
   },
@@ -74,9 +41,10 @@ function classNames (...classes: string[]) {
 
 interface NavbarProps {
   user: User | null
+  googleUser: GoogleUser | null
 }
 
-export function Navbar ({ user }: NavbarProps) {
+export function Navbar ({ user, googleUser }: NavbarProps) {
   return (
     <Popover className="relative bg-white">
       <div className="mx-auto px-4 sm:px-6">
@@ -98,60 +66,8 @@ export function Navbar ({ user }: NavbarProps) {
             </Popover.Button>
           </div>
           <Popover.Group as="nav" className="hidden md:flex space-x-10">
-            <Popover className="relative">
-              {({ open }: { open: boolean }) => (
-                <>
-                  <Popover.Button
-                    className={classNames(
-                      open ? 'text-gray-900' : 'text-gray-500',
-                      'group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                    )}
-                  >
-                    <span>Solutions</span>
-                    <ChevronDownIcon
-                      className={classNames(
-                        open ? 'text-gray-600' : 'text-gray-400',
-                        'ml-2 h-5 w-5 group-hover:text-gray-500'
-                      )}
-                      aria-hidden="true"
-                    />
-                  </Popover.Button>
-
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-200"
-                    enterFrom="opacity-0 translate-y-1"
-                    enterTo="opacity-100 translate-y-0"
-                    leave="transition ease-in duration-150"
-                    leaveFrom="opacity-100 translate-y-0"
-                    leaveTo="opacity-0 translate-y-1"
-                  >
-                    <Popover.Panel className="absolute z-10 -ml-4 mt-3 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2">
-                      <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-                        <div className="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
-                          {solutions.map((item) => (
-                            <Link
-                              key={item.name}
-                              to={item.href}
-                              className="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50"
-                            >
-                              <item.icon className="flex-shrink-0 h-6 w-6 text-uaf-blue" aria-hidden="true" />
-                              <div className="ml-4">
-                                <p className="text-base font-medium text-gray-900">{item.name}</p>
-                                <p className="mt-1 text-sm text-gray-500">{item.description}</p>
-                              </div>
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    </Popover.Panel>
-                  </Transition>
-                </>
-              )}
-            </Popover>
-
-            <Link to="#" className="text-base font-medium text-gray-500 hover:text-gray-900">
-              Pricing
+            <Link to="/communities" className="text-base font-medium text-gray-500 hover:text-gray-900">
+              Communities
             </Link>
             <Link to="#" className="text-base font-medium text-gray-500 hover:text-gray-900">
               Docs
@@ -224,13 +140,15 @@ export function Navbar ({ user }: NavbarProps) {
               </>
               : <>
                 <Link
-                  to="/logout"
-                  className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
+                  to="/dashboard"
+                  className="ml-8 flex items-center space-x-2 whitespace-nowrap text-base font-medium px-4 py-2 border border-transparent rounded-md shadow-sm bg-uaf-538 hover:bg-uaf-636 transition-colors text-gray-700 hover:text-gray-900"
                 >
-                  Log Out
-                </Link>
-                <Link to="/dashboard" className="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
-                  {user.fullName}
+                  <img
+                    className='h-6 rounded-full'
+                    src={googleUser?.avatar ?? ''}
+                    alt=""
+                  />
+                  <span>{user.fullName}</span>
                 </Link>
               </>
             }
@@ -248,7 +166,7 @@ export function Navbar ({ user }: NavbarProps) {
         leaveFrom="opacity-100 scale-100"
         leaveTo="opacity-0 scale-95"
       >
-        <Popover.Panel focus className="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden">
+        <Popover.Panel focus className="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden z-10">
           <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white divide-y-2 divide-gray-50">
             <div className="pt-5 pb-6 px-5">
               <div className="flex items-center justify-between">
@@ -266,25 +184,11 @@ export function Navbar ({ user }: NavbarProps) {
                   </Popover.Button>
                 </div>
               </div>
-              <div className="mt-6">
-                <nav className="grid gap-y-8">
-                  {solutions.map((item) => (
-                    <Link
-                      key={item.name}
-                      to={item.href}
-                      className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50"
-                    >
-                      <item.icon className="flex-shrink-0 h-6 w-6 text-uaf-blue" aria-hidden="true" />
-                      <span className="ml-3 text-base font-medium text-gray-900">{item.name}</span>
-                    </Link>
-                  ))}
-                </nav>
-              </div>
             </div>
             <div className="py-6 px-5 space-y-6">
               <div className="grid grid-cols-2 gap-y-4 gap-x-8">
-                <Link to="#" className="text-base font-medium text-gray-900 hover:text-gray-700">
-                  Pricing
+                <Link to="/communities" className="text-base font-medium text-gray-900 hover:text-gray-700">
+                  Communities
                 </Link>
 
                 <Link to="#" className="text-base font-medium text-gray-900 hover:text-gray-700">
@@ -301,18 +205,40 @@ export function Navbar ({ user }: NavbarProps) {
                 ))}
               </div>
               <div>
-                <Link
-                  to="/login"
-                  className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-uaf-blue hover:bg-uaf-blue"
-                >
-                  Sign up
-                </Link>
-                <p className="mt-6 text-center text-base font-medium text-gray-500">
-                  Existing user?{' '}
-                  <Link to="/login" className="text-uaf-blue hover:text-indigo-500">
-                    Sign in
-                  </Link>
-                </p>
+                {user === null
+                  ? <>
+                    <Link
+                      to="/login"
+                      className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-uaf-blue hover:bg-uaf-blue"
+                    >
+                      Sign up
+                    </Link>
+                    <p className="mt-6 text-center text-base font-medium text-gray-500">
+                      Existing user?{' '}
+                      <Link to="/login" className="text-uaf-blue hover:text-indigo-500">
+                        Sign in
+                      </Link>
+                    </p>
+                  </>
+                  : <>
+                    <Link
+                      to="/dashboard"
+                      className="w-full flex items-center justify-center space-x-2 px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-gray-700 hover:text-gray-900 bg-uaf-538 hover:bg-uaf-636 transition-colors"
+                    >
+                      <img
+                        className='h-6 rounded-full'
+                        src={googleUser?.avatar ?? ''}
+                        alt=""
+                    />
+                      <span>{user.fullName}</span>
+                    </Link>
+                    <p className='mt-6 text-center text-base font-medium'>
+                      <Link to="/logout" className="text-uaf-blue hover:text-indigo-500">
+                        Sign out
+                      </Link>
+                    </p>
+                  </>
+                }
               </div>
             </div>
           </div>
