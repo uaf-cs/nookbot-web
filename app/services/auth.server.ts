@@ -22,7 +22,8 @@ authenticator.use(new GoogleStrategy({
   const googleUser = {
     id: profile.id,
     displayName: profile.displayName,
-    email: profile.emails.find(e => e.value !== undefined)?.value ?? ''
+    email: profile.emails.find(e => e.value !== undefined)?.value ?? '',
+    avatar: profile.photos[0]?.value
   }
 
   if (user == null) {
@@ -62,6 +63,7 @@ connector.use(new DiscordStrategy({
   callbackURL: `${env.siteRoot}/auth/${SocialsProvider.DISCORD}/callback`,
   scope: ['identify', 'guilds', 'guilds.join']
 }, async ({ profile, accessToken, refreshToken }) => {
+  console.log(profile)
   await prisma.discordUser.upsert({
     where: {
       id: profile.id
@@ -70,6 +72,7 @@ connector.use(new DiscordStrategy({
       id: profile.id,
       username: profile.__json.username,
       discriminator: profile.__json.discriminator,
+      avatar: profile.__json.avatar,
 
       accessToken,
       refreshToken

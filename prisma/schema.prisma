@@ -26,6 +26,7 @@ model GoogleUser {
   updatedAt   DateTime @updatedAt
   displayName String
   email       String
+  avatar      String?
   user        User?
 }
 
@@ -35,6 +36,7 @@ model DiscordUser {
   updatedAt     DateTime @updatedAt
   username      String
   discriminator String
+  avatar        String?
   accessToken   String
   refreshToken  String
   Guild         Guild[]
