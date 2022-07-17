@@ -62,9 +62,19 @@ connector.use(new DiscordStrategy({
   callbackURL: `${env.siteRoot}/auth/${SocialsProvider.DISCORD}/callback`,
   scope: ['identify', 'guilds', 'guilds.join']
 }, async ({ profile, accessToken, refreshToken }) => {
-  await prisma.discordUser.create({
-    data: {
+  await prisma.discordUser.upsert({
+    where: {
+      id: profile.id
+    },
+    create: {
       id: profile.id,
+      username: profile.__json.username,
+      discriminator: profile.__json.discriminator,
+
+      accessToken,
+      refreshToken
+    },
+    update: {
       username: profile.__json.username,
       discriminator: profile.__json.discriminator,
 
