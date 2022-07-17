@@ -7,7 +7,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     failureRedirect: '/login'
   })
   if (user.discordId === null) {
-    return redirect('/onboarding')
+    return redirect('/onboarding/discord')
   }
 
   return null

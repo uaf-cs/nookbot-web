@@ -1,6 +1,7 @@
 import { Authenticator } from 'remix-auth'
 import { sessionStorage } from '~/services/session.server'
-import { GoogleStrategy, SocialsProvider } from 'remix-auth-socials'
+import type { DiscordProfile } from 'remix-auth-socials'
+import { DiscordStrategy, GoogleStrategy, SocialsProvider } from 'remix-auth-socials'
 import type { User } from '@prisma/client'
 import { prisma } from '~/services/prisma.server'
 import env from './env.server'
@@ -50,3 +51,27 @@ authenticator.use(new GoogleStrategy({
 
   return user
 }))
+
+export const connector = new Authenticator<DiscordProfile>(sessionStorage, {
+  sessionKey: '_authenticationConnection'
+})
+
+connector.use(new DiscordStrategy({
+  clientID: env.discord.id,
+  clientSecret: env.discord.secret.reveal(),
+  callbackURL: `${env.siteRoot}/auth/${SocialsProvider.DISCORD}/callback`,
+  scope: ['identify', 'guilds', 'guilds.join']
+}, async ({ profile, accessToken, refreshToken }) => {
+  await prisma.discordUser.create({
+    data: {
+      id: profile.id,
+      username: profile.__json.username,
+      discriminator: profile.__json.discriminator,
+
+      accessToken,
+      refreshToken
+    }
+  })
+  return profile
+}
+))
