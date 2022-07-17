@@ -1,4 +1,5 @@
 import type { LoaderFunction } from '@remix-run/node'
+import { redirect } from '@remix-run/node'
 import { SocialsProvider } from 'remix-auth-socials'
 import invariant from 'tiny-invariant'
 import { authenticator, connector } from '~/services/auth.server'
@@ -14,7 +15,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       failureRedirect: '/login'
     })
 
-    const up = await prisma.user.update({
+    await prisma.user.update({
       where: {
         id: currentUser.id
       },
@@ -22,10 +23,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
         discordId: discord.id
       }
     })
-    console.log('aaaaaaaaa', up)
-    await connector.logout(request, {
-      redirectTo: '/onboarding/discord'
-    })
+    return redirect('/dashboard')
   } else {
     return await authenticator.authenticate(params.provider, request, {
       successRedirect: '/dashboard',
