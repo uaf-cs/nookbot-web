@@ -22,19 +22,25 @@ function createDatabaseSessionStorage (cookie: Cookie) {
       const sess = await prisma.session.findUnique({ where: { id } })
       return JSON.parse(sess?.data ?? '{}')
     },
-    async updateData (id, data, expires) {
-      await prisma.session.update(
+    async updateData (id, obj, expires) {
+      const data = JSON.stringify(obj)
+      await prisma.session.upsert(
         {
           where: { id },
-          data: {
+          update: {
+            data
+          },
+          create: {
             id,
-            data: JSON.stringify(data)
+            data
           }
         }
       )
     },
     async deleteData (id) {
-      await prisma.session.delete({ where: { id } })
+      try {
+        await prisma.session.delete({ where: { id } })
+      } catch (err) {}
     }
   })
 }
