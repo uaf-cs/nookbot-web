@@ -4,13 +4,8 @@ import { Popover, Transition } from '@headlessui/react'
 import {
   BookmarkAltIcon,
   CalendarIcon,
-  ChartBarIcon,
-  CursorClickIcon,
   MenuIcon,
-  RefreshIcon,
   ShieldCheckIcon,
-  SupportIcon,
-  ViewGridIcon,
   XIcon
 } from '@heroicons/react/outline'
 import { ChevronDownIcon } from '@heroicons/react/solid'
