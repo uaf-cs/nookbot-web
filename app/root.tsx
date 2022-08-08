@@ -56,7 +56,7 @@ export default function App () {
         <Meta />
         <Links />
       </head>
-      <body className='flex flex-col space-y-2'>
+      <body className='flex flex-col'>
         <Navbar user={user} googleUser={googleUser}></Navbar>
         <Outlet />
         <ScrollRestoration />
