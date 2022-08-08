@@ -4,6 +4,7 @@ import { SocialsProvider } from 'remix-auth-socials'
 import invariant from 'tiny-invariant'
 import { authenticator, connector } from '~/services/auth.server'
 import { prisma } from '~/services/prisma.server'
+import { commitSession, getSession } from '~/services/session.server'
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   invariant(params.provider, 'Expected params.provider')
@@ -23,6 +24,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
         discordId: discord.id
       }
     })
+
+    // Yeet login data
+    const session = await getSession(request.headers.get('Cookie'))
+    session.unset(connector.sessionKey)
+    await commitSession(session)
     return redirect('/dashboard')
   } else {
     return await authenticator.authenticate(params.provider, request, {
