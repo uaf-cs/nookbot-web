@@ -2,6 +2,7 @@ import type { LoaderFunction } from '@remix-run/node'
 import { SocialsProvider } from 'remix-auth-socials'
 import { authenticator } from '~/services/auth.server'
 import { SocialButton } from '../components/forms/socialButton'
+import { CenterContent } from '../components/layout/centerContent'
 
 export const loader: LoaderFunction = async ({ request }) => {
   await authenticator.isAuthenticated(request, {
@@ -14,7 +15,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function Login () {
   return (
     <>
-      <div className="w-lg max-w-3xl self-center space-y-4">
+      <CenterContent>
         <h1 className='text-2xl'>Login</h1>
         <p>
           To verify your identity, we need you to log in via both Google and Discord. This allows us to verify your
@@ -26,7 +27,7 @@ export default function Login () {
         <div className="space-y-2">
           <SocialButton provider={SocialsProvider.GOOGLE} label="Login with Google" />
         </div>
-      </div>
+      </CenterContent>
     </>
   )
 }
