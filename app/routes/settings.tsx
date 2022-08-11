@@ -1,7 +1,9 @@
-import type { DiscordUser, User } from '@prisma/client'
+import { AcademicStatus, DiscordUser, User } from '@prisma/client'
 import type { LoaderFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
+import { useState } from 'react'
+import { Radio } from '~/components/forms/radio'
 import { Callout, CalloutTypes } from '~/components/layout/callout'
 import { CenterContent } from '~/components/layout/centerContent'
 import { Navigate } from '~/components/navigate'
@@ -35,30 +37,26 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function Dashboard () {
   const { user, discord } = useLoaderData<LoaderData>()
+  const [selection, setSelection] = useState<string | null>(user.academicStatus)
+
+  const academicStatusOptions = [{
+    name: 'Student',
+    value: AcademicStatus.STUDENT
+  }, {
+    name: 'Alumni',
+    value: AcademicStatus.ALUMNI
+  }]
+
   return (
     <CenterContent>
-      <h1 className='text text-4xl'>Welcome, {user.fullName}!</h1>
-      {user.academicStatus === null
-        ? <Callout type={CalloutTypes.WARN} title='Academic Status'>
-          You haven't selected your current academic status yet. Selecting your academic status helps other community
-          members see at a glance if you're a current student. Head over to your{' '}
-          <Navigate to='/settings'>user settings</Navigate> to update your preferences.
-        </Callout>
-        : null
-      }
-      <p>
-        TODO:
-      </p>
-      <ul>
-        <li>academic status selection</li>
-        <li>popular community list</li>
-        <li>currently joined communities</li>
-        <li>add new community</li>
-      </ul>
-      <Callout>
-        Your currently connected Discord account is <code>{discord.username}#{discord.discriminator}</code>. If this is
-        no longer accurate, <Navigate to="/onboarding/discord">relink your Discord account</Navigate>.
-      </Callout>
+      <h1 className='text text-4xl'>User Settings</h1>
+      <Radio
+        label='Academic Status'
+        name='academic-status'
+        options={academicStatusOptions}
+        selected={selection}
+        onChange={setSelection}
+      />
     </CenterContent>
   )
 }

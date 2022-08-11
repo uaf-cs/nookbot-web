@@ -13,6 +13,7 @@ import { Link } from '@remix-run/react'
 
 import wordmark from '~/assets/wordmark.svg'
 import type { GoogleUser, User } from '@prisma/client'
+import { classNames } from '../../utils'
 
 const resources = [
   {
@@ -29,10 +30,6 @@ const resources = [
   },
   { name: 'Security', description: 'Understand how we take your privacy seriously.', href: '#', icon: ShieldCheckIcon }
 ]
-
-function classNames (...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
-}
 
 interface NavbarProps {
   user: User | null
