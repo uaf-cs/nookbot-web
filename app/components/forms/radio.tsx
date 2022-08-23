@@ -1,5 +1,5 @@
 import { RadioGroup } from '@headlessui/react'
-import { CheckIcon, MinusIcon } from '@heroicons/react/outline'
+import { CheckIcon } from '@heroicons/react/outline'
 import { classNames } from '~/utils'
 
 interface RadioOption {
@@ -23,8 +23,8 @@ export function Radio ({ label, name, options, selected, onChange }: RadioProps)
           {({ active, checked }) => (
             <div
               className={classNames(
-                'p-2 flex justify-between border-l-4 border-solid cursor-pointer transition-all',
-                checked ? 'bg-uaf-636 border-uaf-blue shadow-lg' : 'bg-slate-200 border-slate-500 shadow hover:shadow-md hover:bg-slate-300',
+                'p-2 flex justify-between border-l-4 border-solid cursor-pointer transition-all shadow',
+                checked ? 'bg-uaf-636 border-uaf-blue' : 'bg-slate-100 border-slate-500 hover:brightness-95',
                 active ? 'outline-2 outline-uaf-blue' : ''
               )}
             >
