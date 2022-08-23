@@ -5,7 +5,7 @@
       <span v-if="error">{{ error }}. Please report this issue to an admin.</span>
     </div>
     <div v-else-if="user === null">
-      <h1>UAF CS+DMS</h1>
+      <h1>UAF Students Discord</h1>
       <p>
         Hey there! Welcome to the UAF Computer Science and Math Discord server.
         Before we get started, we just want to verify that you're part of the UA
