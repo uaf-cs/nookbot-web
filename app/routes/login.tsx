@@ -1,11 +1,11 @@
 import type { LoaderFunction } from '@remix-run/node'
 import { SocialsProvider } from 'remix-auth-socials'
-import { authenticator } from '~/services/auth.server'
+import { isAuthenticated } from '~/services/auth.server'
 import { SocialButton } from '../components/forms/socialButton'
 import { CenterContent } from '../components/layout/centerContent'
 
 export const loader: LoaderFunction = async ({ request }) => {
-  await authenticator.isAuthenticated(request, {
+  await isAuthenticated(request, {
     successRedirect: '/dashboard'
   })
 

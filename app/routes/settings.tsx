@@ -1,13 +1,12 @@
-import { AcademicStatus, DiscordUser, User } from '@prisma/client'
-import type { ActionFunction, ErrorBoundaryComponent, LoaderFunction } from '@remix-run/node'
+import type { DiscordUser, User } from '@prisma/client'
+import { AcademicStatus } from '@prisma/client'
+import type { ActionFunction, LoaderFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Form, useActionData, useLoaderData } from '@remix-run/react'
 import { useState } from 'react'
 import { Radio } from '~/components/forms/radio'
-import { Callout, CalloutTypes } from '~/components/layout/callout'
 import { CenterContent } from '~/components/layout/centerContent'
-import { Navigate } from '~/components/navigate'
-import { authenticator } from '~/services/auth.server'
+import { isAuthenticated } from '~/services/auth.server'
 import { prisma } from '~/services/prisma.server'
 
 interface ActionData {
@@ -22,7 +21,7 @@ interface LoaderData {
 }
 
 export const action: ActionFunction = async ({ request }) => {
-  const user = await authenticator.isAuthenticated(request, {
+  const user = await isAuthenticated(request, {
     failureRedirect: '/login'
   })
   if (user.discordId === null) {
@@ -55,7 +54,7 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const user = await authenticator.isAuthenticated(request, {
+  const user = await isAuthenticated(request, {
     failureRedirect: '/login'
   })
   if (user.discordId === null) {
@@ -75,8 +74,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 }
 
 export default function Dashboard () {
-  const { user, discord } = useLoaderData<LoaderData>()
   const { errors } = useActionData<ActionData>() ?? { errors: {} }
+  const { user, discord } = useLoaderData<LoaderData>()
   const [selection, setSelection] = useState<string | null>(user.academicStatus)
 
   console.log(user)

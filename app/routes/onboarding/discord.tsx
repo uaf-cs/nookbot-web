@@ -5,14 +5,14 @@ import { useLoaderData } from '@remix-run/react'
 import { SocialsProvider } from 'remix-auth-socials'
 import { SocialButton } from '~/components/forms/socialButton'
 import { CenterContent } from '~/components/layout/centerContent'
-import { authenticator } from '~/services/auth.server'
+import { isAuthenticated } from '~/services/auth.server'
 
 interface LoaderData {
   user: User
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const user = await authenticator.isAuthenticated(request, {
+  const user = await isAuthenticated(request, {
     failureRedirect: '/login'
   })
 

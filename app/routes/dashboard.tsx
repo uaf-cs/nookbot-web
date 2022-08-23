@@ -5,7 +5,7 @@ import { useLoaderData } from '@remix-run/react'
 import { Callout, CalloutTypes } from '~/components/layout/callout'
 import { CenterContent } from '~/components/layout/centerContent'
 import { Navigate } from '~/components/navigate'
-import { authenticator } from '~/services/auth.server'
+import { isAuthenticated } from '~/services/auth.server'
 import { prisma } from '~/services/prisma.server'
 
 interface LoaderData {
@@ -14,7 +14,7 @@ interface LoaderData {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const user = await authenticator.isAuthenticated(request, {
+  const user = await isAuthenticated(request, {
     failureRedirect: '/login'
   })
   if (user.discordId === null) {

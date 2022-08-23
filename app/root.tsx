@@ -13,7 +13,7 @@ import {
 import styles from './tailwind.css'
 import { Navbar } from '~/components/layout/navbar'
 import type { GoogleUser, User } from '@prisma/client'
-import { authenticator } from './services/auth.server'
+import { isAuthenticated } from './services/auth.server'
 import { prisma } from './services/prisma.server'
 
 export const links: LinksFunction = () => [
@@ -32,7 +32,7 @@ interface LoaderData {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const user = await authenticator.isAuthenticated(request)
+  const user = await isAuthenticated(request)
   let googleUser: GoogleUser | null = null
   if (user !== null) {
     googleUser = await prisma.googleUser.findFirst({

@@ -2,7 +2,7 @@ import type { LoaderFunction } from '@remix-run/node'
 import { redirect } from '@remix-run/node'
 import { SocialsProvider } from 'remix-auth-socials'
 import invariant from 'tiny-invariant'
-import { authenticator, connector } from '~/services/auth.server'
+import { authenticator, connector, isAuthenticated } from '~/services/auth.server'
 import { prisma } from '~/services/prisma.server'
 import { commitSession, getSession } from '~/services/session.server'
 
@@ -12,7 +12,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     const discord = await connector.authenticate(params.provider, request, {
       // failureRedirect: '/onboarding/discord'
     })
-    const currentUser = await authenticator.isAuthenticated(request, {
+    const currentUser = await isAuthenticated(request, {
       failureRedirect: '/login'
     })
 
