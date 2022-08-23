@@ -131,6 +131,13 @@
         <button @click="saveCourses">Save selection</button>
       </div>
     </div>
+    <div class="non-discrimination note">
+      <p>
+        UAF is an AA/EO employer and educational institution and prohibits
+        illegal discrimination against any individual. Learn more about UA's
+        <a href="https://www.alaska.edu/nondiscrimination">notice of nondiscrimination</a>.
+      </p>
+    </div>
   </div>
 </template>
 
@@ -331,6 +338,9 @@ a {
   margin: auto;
   padding: 0 5em;
   margin-bottom: 7em;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 1em);
 }
 
 .note {
@@ -382,6 +392,11 @@ a {
     color: $white;
     padding: 1em;
   }
+}
+
+.non-discrimination {
+  margin-top: auto;
+  text-align: center;
 }
 
 .button-flex {
