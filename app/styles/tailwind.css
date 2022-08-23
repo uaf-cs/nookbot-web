@@ -11,3 +11,11 @@
 /* a {
   @apply text-uaf-blue decoration-uaf-blue underline;
 } */
+
+.button {
+  @apply bg-slate-200 p-2 pb-1 px-4 border-b-4 border-uaf-blue hover:bg-slate-300 transition-colors active:bg-slate-400 shadow active:shadow-md
+}
+
+.button.success {
+ @apply border-emerald-600
+}
