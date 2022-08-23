@@ -7,8 +7,9 @@
     <div v-else-if="user === null">
       <h1>UAF Students Discord</h1>
       <p>
-        Hey there! Welcome to the UAF Computer Science and Math Discord server.
-        Before we get started, we just want to verify that you're part of the UA
+        Hey there! Welcome to the UAF Students Discord server. We currently
+        provide communications for Math, Chemistry, and Computer Science. Before
+        we get started, we just want to verify that you're part of the UA
         system, and as such we'll need you to log into your UA assigned Google
         account, as well as your Discord account so we know who to tie it to.
       </p>
