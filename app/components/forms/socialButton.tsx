@@ -9,15 +9,15 @@ export const SocialButton: React.FC<SocialButtonProps> = ({ provider, label }: {
   let brandClass = 'bg-uaf-blue'
   switch (provider) {
     case SocialsProvider.DISCORD:
-      brandClass = 'bg-[#5865F2]'
+      brandClass = 'border-b-[#5865F2]'
       break
 
     case SocialsProvider.GOOGLE:
-      brandClass = 'bg-[#4285F4]'
+      brandClass = 'border-b-[#4285F4]'
   }
   return (
     <Form action={`/auth/${provider as string}`} method="post" className='flex flex-col items-center'>
-      <button className={'min-w-[300px] text-white px-4 py-2 rounded-md ' + brandClass}>{label}</button>
+      <button className={'min-w-[300px] button bg-slate-100 ' + brandClass}>{label}</button>
     </Form>
   )
 }

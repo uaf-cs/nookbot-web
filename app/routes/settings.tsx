@@ -101,7 +101,7 @@ export default function Dashboard () {
         />
         {errors.academicStatus === undefined ? null : <p className='text-rose-500 mt-2'>{errors.academicStatus}</p>}
         <div className="flex mt-6 justify-end">
-          <button className='button success' type="submit">Save</button>
+          <button className='button bg-slate-100 border-emerald-500' type="submit">Save</button>
         </div>
       </Form>
     </CenterContent>

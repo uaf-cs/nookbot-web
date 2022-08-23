@@ -117,15 +117,15 @@ export function Navbar ({ user, googleUser }: NavbarProps) {
               )}
             </Popover>
           </Popover.Group>
-          <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
+          <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0 space-x-2">
             {user === null
               ? <>
-                <Link to="/login" className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
+                <Link to="/login" className="button bg-slate-100 border-uaf-636">
                   Sign in
                 </Link>
                 <Link
                   to="/login"
-                  className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-uaf-blue hover:bg-uaf-blue"
+                  className="button bg-slate-200 border-uaf-blue"
                 >
                   Sign up
                 </Link>
@@ -133,7 +133,7 @@ export function Navbar ({ user, googleUser }: NavbarProps) {
               : <>
                 <Link
                   to="/dashboard"
-                  className="ml-8 flex items-center space-x-2 whitespace-nowrap text-base font-medium px-4 py-2 border border-transparent rounded-md shadow-sm bg-uaf-538 hover:bg-uaf-636 transition-colors text-gray-700 hover:text-gray-900"
+                  className="button bg-slate-100 border-uaf-636 ml-8 flex items-center space-x-2"
                 >
                   <img
                     className='h-6 rounded-full'
@@ -201,7 +201,7 @@ export function Navbar ({ user, googleUser }: NavbarProps) {
                   ? <>
                     <Link
                       to="/login"
-                      className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-uaf-blue hover:bg-uaf-blue"
+                      className="w-full flex items-center justify-center button bg-slate-200 border-uaf-blue"
                     >
                       Sign up
                     </Link>
@@ -215,7 +215,7 @@ export function Navbar ({ user, googleUser }: NavbarProps) {
                   : <>
                     <Link
                       to="/dashboard"
-                      className="w-full flex items-center justify-center space-x-2 px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-gray-700 hover:text-gray-900 bg-uaf-538 hover:bg-uaf-636 transition-colors"
+                      className="w-full flex items-center justify-center button bg-slate-100 border-uaf-636"
                     >
                       <img
                         className='h-6 rounded-full'
