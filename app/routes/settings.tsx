@@ -2,10 +2,12 @@ import type { DiscordUser, User } from '@prisma/client'
 import { AcademicStatus } from '@prisma/client'
 import type { ActionFunction, LoaderFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { Form, useActionData, useLoaderData } from '@remix-run/react'
+import { Form, Link, useActionData, useLoaderData } from '@remix-run/react'
 import { useState } from 'react'
 import { Radio } from '~/components/forms/radio'
+import { Callout } from '~/components/layout/callout'
 import { CenterContent } from '~/components/layout/centerContent'
+import { Navigate } from '~/components/navigate'
 import { isAuthenticated } from '~/services/auth.server'
 import { prisma } from '~/services/prisma.server'
 
@@ -91,6 +93,10 @@ export default function Dashboard () {
   return (
     <CenterContent>
       <h1 className='text text-4xl'>User Settings</h1>
+      <Callout>
+        Your currently connected Discord account is <code>{discord.username}#{discord.discriminator}</code>. If this is
+        no longer accurate, <Navigate to="/onboarding/discord">relink your Discord account</Navigate>.
+      </Callout>
       <Form method='post' reloadDocument>
         <Radio
           label='Academic Status'
@@ -100,7 +106,10 @@ export default function Dashboard () {
           onChange={setSelection}
         />
         {errors.academicStatus === undefined ? null : <p className='text-rose-500 mt-2'>{errors.academicStatus}</p>}
-        <div className="flex mt-6 justify-end">
+        <div className="flex mt-6 justify-between">
+          <div>
+            <Link to='/logout' className='block button bg-slate-100 border-rose-300'>Logout</Link>
+          </div>
           <button className='button bg-slate-100 border-emerald-500' type="submit">Save</button>
         </div>
       </Form>
