@@ -13,30 +13,47 @@
         system, and as such we'll need you to log into your UA assigned Google
         account, as well as your Discord account so we know who to tie it to.
       </p>
-      <div class="button-flex">
-        <a href="/api/auth/login">Log In</a>
-      </div>
+      <h2>Important note about FERPA</h2>
       <p>
-        Here's exactly what'll happen when you click Log In.
+        By signing into this service you acknowledge that other members of the
+        UAF Students Discord community will be able to view any courses that
+        you have joined via this service. Only courses you select on this
+        website will be shown on your Discord profile. The UAF Students Discord
+        staff and administrators do not have access to any data from UAF or the
+        University of Alaska outside of approved directory information.
       </p>
-      <ol>
-        <li>
-          You'll be directed to Google's log in page. You <strong>must</strong>
-          select your UA assigned Google account here (ending in @alaska.edu) or
-          you will not be able to continue.
-        </li>
-        <li>
-          After logging in with Google, you'll be directed to Discord's log in
-          page. Log in with your Discord account, and allow Nookbot to access
-          your account information.
-        </li>
-        <li>
-          Finally, you'll be directed here. If all your accounts work out,
-          you'll automatically be added to the server and allowed to view
-          channels there. More information will be given on the page when you
-          arrive there.
-        </li>
-      </ol>
+      <div class="selections">
+        <Checkbox :value="ferpaAcknowledgement" @input="ferpaAcknowledgement = !ferpaAcknowledgement">
+          Acknowledge and Accept
+        </Checkbox>
+      </div>
+      <div v-if="ferpaAcknowledgement">
+        <p>
+          Here's exactly what'll happen when you click Log In.
+        </p>
+        <ol>
+          <li>
+            You'll be directed to Google's log in page. You <strong>must</strong>
+            select your UA assigned Google account here (ending in @alaska.edu) or
+            you will not be able to continue.
+          </li>
+          <li>
+            After logging in with Google, you'll be directed to Discord's log in
+            page. Log in with your Discord account, and allow Nookbot to access
+            your account information.
+          </li>
+          <li>
+            Finally, you'll be directed here. If all your accounts work out,
+            you'll automatically be added to the server and allowed to view
+            channels there. More information will be given on the page when you
+            arrive there.
+          </li>
+        </ol>
+
+        <div class="button-flex">
+          <a href="/api/auth/login">Log In</a>
+        </div>
+      </div>
       <p>
         Already joined the Discord server?
         <a href="https://discord.com/channels/478810581273673746" target="_blank">
@@ -158,6 +175,8 @@ import TextInput from '@/components/TextInput.vue'
   }
 })
 export default class Home extends Vue {
+  ferpaAcknowledgement = false
+
   loading = true
   search = ''
 
@@ -324,6 +343,14 @@ h3 {
 
 h4 {
   color: lighten($greyple, 10);
+}
+
+p, ul, ol {
+  line-height: 1.75em;
+}
+
+li {
+  margin-bottom: 1em;
 }
 
 a {
