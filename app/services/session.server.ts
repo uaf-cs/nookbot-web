@@ -1,6 +1,6 @@
 import { createSessionStorage } from '@remix-run/node' // or "@remix-run/cloudflare"
 import { prisma } from '~/services/prisma.server'
-import env from './env.server'
+import env from '~/services/env.server'
 
 type Cookie = Parameters<typeof createSessionStorage>[0]['cookie']
 

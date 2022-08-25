@@ -10,11 +10,11 @@ import {
   useLoaderData
 } from '@remix-run/react'
 
-import styles from './tailwind.css'
+import styles from '~/tailwind.css'
 import { Navbar } from '~/components/layout/navbar'
 import type { GoogleUser, User } from '@prisma/client'
-import { isAuthenticated } from './services/auth.server'
-import { prisma } from './services/prisma.server'
+import { isAuthenticated } from '~/services/auth.server'
+import { prisma } from '~/services/prisma.server'
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: styles }

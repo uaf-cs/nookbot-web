@@ -5,7 +5,7 @@ import type { DiscordProfile } from 'remix-auth-socials'
 import { DiscordStrategy, GoogleStrategy, SocialsProvider } from 'remix-auth-socials'
 import type { User } from '@prisma/client'
 import { prisma } from '~/services/prisma.server'
-import env from './env.server'
+import env from '~/services/env.server'
 import { redirect } from '@remix-run/node'
 
 // Create an instance of the authenticator, pass a generic with what
