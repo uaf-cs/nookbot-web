@@ -2,13 +2,13 @@
 import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import {
-  BookmarkAltIcon,
+  Bars3Icon,
+  BookmarkSquareIcon,
   CalendarIcon,
-  MenuIcon,
   ShieldCheckIcon,
-  XIcon
-} from '@heroicons/react/outline'
-import { ChevronDownIcon } from '@heroicons/react/solid'
+  XMarkIcon
+} from '@heroicons/react/24/outline'
+import { ChevronDownIcon } from '@heroicons/react/24/solid'
 import { Link } from '@remix-run/react'
 
 import wordmark from '~/assets/wordmark.svg'
@@ -20,7 +20,7 @@ const resources = [
     name: 'Guides',
     description: 'Learn how to maximize Nookbot to get the most out of it.',
     href: '#',
-    icon: BookmarkAltIcon
+    icon: BookmarkSquareIcon
   },
   {
     name: 'Events',
@@ -54,7 +54,7 @@ export function Navbar ({ user, googleUser }: NavbarProps) {
           <div className="-mr-2 -my-2 md:hidden">
             <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
               <span className="sr-only">Open menu</span>
-              <MenuIcon className="h-6 w-6" aria-hidden="true" />
+              <Bars3Icon className="h-6 w-6" aria-hidden="true" />
             </Popover.Button>
           </div>
           <Popover.Group as="nav" className="hidden md:flex space-x-10">
@@ -172,7 +172,7 @@ export function Navbar ({ user, googleUser }: NavbarProps) {
                 <div className="-mr-2">
                   <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                     <span className="sr-only">Close menu</span>
-                    <XIcon className="h-6 w-6" aria-hidden="true" />
+                    <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                   </Popover.Button>
                 </div>
               </div>

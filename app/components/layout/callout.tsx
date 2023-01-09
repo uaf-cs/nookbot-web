@@ -1,5 +1,10 @@
-import { CheckIcon, ExclamationCircleIcon, ExclamationIcon, InformationCircleIcon } from '@heroicons/react/outline'
-import { ChevronRightIcon } from '@heroicons/react/solid'
+import {
+  CheckIcon,
+  ExclamationCircleIcon,
+  ExclamationTriangleIcon,
+  InformationCircleIcon
+} from '@heroicons/react/24/outline'
+import { ChevronRightIcon } from '@heroicons/react/24/solid'
 import type { ReactNode } from 'react'
 
 export enum CalloutTypes {
@@ -40,7 +45,7 @@ const styles: { [key in CalloutTypes]: CalloutClassList } = {
     head: 'bg-amber-200',
     icon: 'text-amber-500',
     side: 'border-amber-500',
-    defaultIcon: ExclamationIcon
+    defaultIcon: ExclamationTriangleIcon
   },
   [CalloutTypes.ERROR]: {
     head: 'bg-rose-200',
