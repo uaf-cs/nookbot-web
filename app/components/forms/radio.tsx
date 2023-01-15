@@ -1,5 +1,5 @@
 import { RadioGroup } from '@headlessui/react'
-import { CheckIcon } from '@heroicons/react/outline'
+import { CheckIcon } from '@heroicons/react/24/outline'
 import { classNames } from '~/utils'
 
 interface RadioOption {
