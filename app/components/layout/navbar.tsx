@@ -131,6 +131,10 @@ export function Navbar ({ user, googleUser }: NavbarProps) {
                 </Link>
               </>
               : <>
+
+                <div>
+                  <Link to='/logout' className='block button bg-slate-100 border-rose-300'>Logout</Link>
+                </div>
                 <Link
                   to="/dashboard"
                   className="button bg-slate-100 border-uaf-636 ml-8 flex items-center space-x-2"
