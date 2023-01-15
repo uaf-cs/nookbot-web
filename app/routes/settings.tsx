@@ -5,7 +5,7 @@ import { json, redirect } from '@remix-run/node'
 import { Form, Link, useActionData, useLoaderData } from '@remix-run/react'
 import { useState } from 'react'
 import { Radio } from '~/components/forms/radio'
-import { Callout } from '~/components/layout/callout'
+import { Callout, CalloutTypes } from '~/components/layout/callout'
 import { CenterContent } from '~/components/layout/centerContent'
 import { Navigate } from '~/components/navigate'
 import { isAuthenticated } from '~/services/auth.server'
@@ -14,7 +14,8 @@ import { prisma } from '~/services/prisma.server'
 interface ActionData {
   errors: {
     academicStatus?: string
-  }
+  },
+  success: boolean
 }
 
 interface LoaderData {
@@ -52,7 +53,7 @@ export const action: ActionFunction = async ({ request }) => {
     console.log('updated academic status')
   }
 
-  return { errors }
+  return { errors, success: Object.keys(errors).length === 0 }
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -76,11 +77,9 @@ export const loader: LoaderFunction = async ({ request }) => {
 }
 
 export default function Dashboard () {
-  const { errors } = useActionData<ActionData>() ?? { errors: {} }
+  const { errors, success: saveSuccess } = useActionData<ActionData>() ?? { errors: {}, success: false }
   const { user, discord } = useLoaderData<LoaderData>()
   const [selection, setSelection] = useState<string | null>(user.academicStatus)
-
-  console.log(user)
 
   const academicStatusOptions = [{
     name: 'Student',
@@ -93,6 +92,13 @@ export default function Dashboard () {
   return (
     <CenterContent>
       <h1 className='text text-4xl'>User Settings</h1>
+      {
+        saveSuccess
+          ? <Callout type={CalloutTypes.SUCCESS} title='Settings saved'>
+              Your changes have been succesfully saved and applied.
+            </Callout>
+          : null
+      }
       <Callout>
         Your currently connected Discord account is <code>{discord.username}#{discord.discriminator}</code>. If this is
         no longer accurate, <Navigate to="/onboarding/discord">relink your Discord account</Navigate>.
@@ -108,7 +114,7 @@ export default function Dashboard () {
         {errors.academicStatus === undefined ? null : <p className='text-rose-500 mt-2'>{errors.academicStatus}</p>}
         <div className="flex mt-6 justify-between">
           <div>
-            <Link to='/logout' className='block button bg-slate-100 border-rose-300'>Logout</Link>
+            <Link to='/dashboard' className='block button bg-slate-100 border-rose-300'>Cancel</Link>
           </div>
           <button className='button bg-slate-100 border-emerald-500' type="submit">Save</button>
         </div>
