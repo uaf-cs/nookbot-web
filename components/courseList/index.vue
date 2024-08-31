@@ -1,5 +1,5 @@
 <template>
-  <SubjectList
+  <CourseListSubject
     v-for="[subject, courses] in subjectMap"
     :key="subject"
     :courses="courses"
@@ -9,7 +9,6 @@
 
 <script setup lang="ts">
 import type { Course } from "~/server/actions/courses";
-import SubjectList from "~/components/courses/SubjectList.vue";
 
 const props = defineProps<{
   courses: Course[];

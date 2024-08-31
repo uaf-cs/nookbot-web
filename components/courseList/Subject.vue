@@ -1,16 +1,14 @@
 <template>
-  <div>
-    <h3>{{ subject }}</h3>
-    <template v-for="(courses, level) in groupedCourses">
+  <CollapseDetails :title="subject">
+    <div class="not-prose" v-for="(courses, level) in groupedCourses">
       <div class="divider divider-start">{{ level }} level</div>
-
-      <ul>
-        <li v-for="course in courses">
-          {{ course.course }} - {{ course.title }}
-        </li>
-      </ul>
-    </template>
-  </div>
+      <FormKit
+        type="checkbox"
+        :name="`courses`"
+        :options="courses.map(courseToOptions)"
+      />
+    </div>
+  </CollapseDetails>
 </template>
 
 <script setup lang="ts">
@@ -48,4 +46,12 @@ const groupedCourses = computed(() => {
     {} as Record<string, Course[]>,
   );
 });
+
+function courseToOptions(course: Course) {
+  return {
+    value: course.id,
+    label: `${course.course} ${course.title}`,
+    help: course.instructor,
+  };
+}
 </script>

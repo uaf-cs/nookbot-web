@@ -1,3 +1,8 @@
-import { defineFormKitConfig } from "@formkit/vue";
+import { createInput, defaultConfig } from "@formkit/vue";
+import { classes } from "./formkit.theme";
 
-export default defineFormKitConfig({});
+export default defaultConfig({
+  config: {
+    classes,
+  },
+});
