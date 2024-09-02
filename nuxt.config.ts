@@ -9,11 +9,11 @@ export default defineNuxtConfig({
     },
   },
   modules: [
+    "nuxt-auth-utils",
     "@hebilicious/form-actions-nuxt",
     "@formkit/nuxt",
     "@nuxtjs/tailwindcss",
     "nuxt-headlessui",
-    "nuxt-auth-utils",
   ],
   formkit: {
     // Experimental support for auto loading (see note):

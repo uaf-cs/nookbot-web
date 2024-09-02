@@ -8,26 +8,27 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "prepare": "husky"
+    "prepare": "node .husky/install.mjs"
   },
   "dependencies": {
-    "@hebilicious/form-actions-nuxt": "^0.3.0",
-    "nuxt": "^3.13.0",
-    "nuxt-auth-utils": "^0.3.5",
-    "vue": "latest"
-  },
-  "packageManager": "pnpm@9.7.0+sha512.dc09430156b427f5ecfc79888899e1c39d2d690f004be70e05230b72cb173d96839587545d09429b55ac3c429c801b4dc3c0e002f653830a420fa2dd4e3cf9cf",
-  "devDependencies": {
     "@formkit/nuxt": "^1.6.5",
     "@formkit/themes": "^1.6.5",
     "@formkit/vue": "^1.6.5",
+    "@hebilicious/form-actions-nuxt": "^0.3.0",
     "@heroicons/vue": "^2.1.5",
     "@nuxtjs/tailwindcss": "^6.12.1",
     "@tailwindcss/typography": "^0.5.14",
     "daisyui": "^4.12.10",
+    "nuxt": "^3.13.0",
+    "nuxt-auth-utils": "^0.3.5",
+    "nuxt-headlessui": "^1.2.0",
+    "vue": "latest"
+  },
+  "packageManager": "pnpm@9.7.0+sha512.dc09430156b427f5ecfc79888899e1c39d2d690f004be70e05230b72cb173d96839587545d09429b55ac3c429c801b4dc3c0e002f653830a420fa2dd4e3cf9cf",
+  "devDependencies": {
     "husky": "^9.1.5",
     "lint-staged": "^15.2.9",
-    "nuxt-headlessui": "^1.2.0",
+    "nitropack": "^2.9.7",
     "prettier": "^3.3.3"
   },
   "lint-staged": {
