@@ -8,5 +8,8 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  middleware: "require-auth",
+});
 const { result, pending } = await useLoader("courses");
 </script>

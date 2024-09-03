@@ -1,7 +1,10 @@
 <template>
-  <div>
+  <div class="drawer auto-cols-fr">
     <LayoutNavbar />
-    <NuxtPage />
+    <div class="mx-4">
+      <NuxtPage />
+    </div>
+    <LayoutDrawer />
   </div>
 </template>
 
