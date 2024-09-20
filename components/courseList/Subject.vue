@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Course } from "~/server/actions/courses";
+import type { Course } from "~/types";
 
 const props = defineProps<{
   subject: string;

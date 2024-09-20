@@ -1,4 +1,17 @@
-import Google from "~/server/routes/auth/google";
+export type Course = {
+  id: string;
+  channel: string;
+  subject: string;
+  course: string;
+  section: string;
+  title: string;
+  instructor: string;
+};
+
+export type Subject = {
+  id: string;
+  name: string;
+};
 
 export interface GoogleUserDetails {
   name: string;

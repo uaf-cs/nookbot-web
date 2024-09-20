@@ -1,4 +1,6 @@
-export const getCourses = async () => {
+import { Course, Subject } from "~/types";
+
+export const getCourses = async (): Promise<Course[]> => {
   return [
     {
       id: "1274536386728562708",
@@ -652,5 +654,16 @@ export const getCourses = async () => {
       title: "Introduction to Computer Programming",
       instructor: "Travis M Payton ",
     },
+  ];
+};
+
+export const getSubjects = async (): Promise<Subject[]> => {
+  return [
+    { id: "802273626002948146", name: "Chemistry" },
+    {
+      id: "796320363587698709",
+      name: "Mathematics and Statistics",
+    },
+    { id: "796320258302017546", name: "Computer Science" },
   ];
 };
