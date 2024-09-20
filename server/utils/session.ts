@@ -3,7 +3,7 @@ import { H3Event } from "h3";
 import { setUserSession } from "#imports";
 
 export async function setSessionUser(event: H3Event) {
-  // TODO: This should be removed but for now hooks can't be used for this use case. See https://github.com/atinux/nuxt-auth-utils/pull/130/files#r1741242713
+  // TODO: This should be removed but for now hooks can't be used for this use case. See https://github.com/atinux/nuxt-auth-utils/issues/175
   const session = await getUserSession(event);
 
   if (session.google && session.discord) {
@@ -15,5 +15,5 @@ export async function setSessionUser(event: H3Event) {
     });
     return;
   }
-  await setUserSession(event, { user: null });
+  await setUserSession(event, { user: undefined });
 }

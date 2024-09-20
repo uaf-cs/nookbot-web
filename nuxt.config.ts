@@ -3,7 +3,6 @@ export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   devtools: {
     enabled: true,
-
     timeline: {
       enabled: true,
     },
@@ -18,5 +17,8 @@ export default defineNuxtConfig({
   formkit: {
     // Experimental support for auto loading (see note):
     autoImport: true,
+  },
+  runtimeConfig: {
+    redisUrl: process.env.REDIS_URL,
   },
 });
