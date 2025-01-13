@@ -202,8 +202,8 @@ export default class Home extends Vue {
       const { courses, subjects } = await courseRequest.json()
       this.subjects = subjects.sort()
       this.courses = courses.sort((a: Course, b: Course) => {
-        if (`${a.course}-${a.section}` < `${b.course}-${b.section}`) { return -1 }
-        if (`${a.course}-${a.section}` > `${b.course}-${b.section}`) { return 1 }
+        if (`${a.course}` < `${b.course}`) { return -1 }
+        if (`${a.course}` > `${b.course}`) { return 1 }
         return 0
       })
       for (const course of this.courses) {
@@ -231,7 +231,6 @@ export default class Home extends Vue {
       if (
         course.subject.toLowerCase().includes(this.search.toLowerCase()) ||
         course.course.toLowerCase().includes(this.search.toLowerCase()) ||
-        course.section.toLowerCase().includes(this.search.toLowerCase()) ||
         course.title.toLowerCase().includes(this.search.toLowerCase()) ||
         course.instructor.toLowerCase().includes(this.search.toLowerCase())
       ) {
