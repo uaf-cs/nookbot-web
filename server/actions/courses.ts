@@ -1,6 +1,6 @@
 import { getCourses, getSubjects } from "~/server/utils/courses";
 
-export const loader = defineServerLoader(async () => {
+export const loader = defineServerLoader(async (event) => {
   const [courses, subjects] = await Promise.all([getCourses(), getSubjects()]);
   return {
     courses,

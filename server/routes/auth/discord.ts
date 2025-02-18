@@ -1,7 +1,7 @@
 import { DiscordUserDetails } from "~/types";
-import { getSessionUser, setSessionUser } from "~/server/utils/session";
+import { setSessionUser } from "~/server/utils/session";
 
-export default oauthDiscordEventHandler({
+export default defineOAuthDiscordEventHandler({
   async onSuccess(event, { user: discord }: { user: DiscordUserDetails }) {
     const session = await setUserSession(event, {
       discord,

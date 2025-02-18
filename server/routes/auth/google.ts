@@ -1,7 +1,7 @@
 import { GoogleUserDetails } from "~/types";
 import { setSessionUser } from "~/server/utils/session";
 
-export default oauthGoogleEventHandler({
+export default defineOAuthGoogleEventHandler({
   async onSuccess(event, { user: google }: { user: GoogleUserDetails }) {
     const session = await setUserSession(event, { google });
     if (!session.discord) {
